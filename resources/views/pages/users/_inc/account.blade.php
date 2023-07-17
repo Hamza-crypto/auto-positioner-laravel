@@ -13,39 +13,38 @@
                 @csrf
                 @method('PATCH')
 
-                <x-input
-                    type="text"
-                    label="Name"
-                    name="name"
-                    placeholder="Enter your name"
-                    :value="$user->name"
-                ></x-input>
-
-                <x-input
-                    type="text"
-                    label="Email"
-                    name="email"
-                    placeholder="Enter your email"
-                    :value="$user->email"
-
-                ></x-input>
-
-                <div class="form-group">
-                    <label for="role">{{ 'Role' }}</label>
-                    <select id="role" class="form-control select2 @error('role') is-invalid @enderror" name="role" data-toggle="select2">
-
-                        @foreach(\App\Models\User::USER_ROLES as  $key => $value)
-                            <option value="{{ $key }}" @if(old('role' ,$user->role ) == $key) selected @endif >{{ $value }}</option>
-                        @endforeach
-
-                    </select>
-                    @error('role')
-                    <div class="invalid-feedback">
-                        {{ $message }}
+                <div class="row">
+                    <div class="col">
+                        <x-input
+                            type="text"
+                            label="Name"
+                            name="name"
+                            placeholder="Enter your name"
+                            :value="$user->name"
+                        ></x-input>
                     </div>
-                    @enderror
+                    <div class="col">
+                        <x-input
+                            type="number"
+                            label="Age"
+                            name="age"
+                            placeholder="Enter age"
+                            :value="$user->age"
+                        ></x-input>
+                    </div>
                 </div>
 
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="form-label" for="date_paid">Shift Time</label>
+                            <input id="time_in" class="form-control daterange" type="text" name="time_in"
+                                   value="{{ request()->date_paid }}"
+                                   placeholder="{{ __('Select Date range') }}"/>
+                        </div>
+
+                    </div>
+                </div>
 
 
                 <button type="submit" class="btn btn-primary">Update account</button>

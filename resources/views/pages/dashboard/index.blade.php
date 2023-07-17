@@ -17,6 +17,5 @@
         <x-alert type="warning">{{ session('warning') }}</x-alert>
     @endif
 
-    @include('pages.dashboard._inc.stats')
-    @include('pages.dashboard._inc.sold-table')
+
 @endsection

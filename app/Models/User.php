@@ -5,42 +5,41 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable, Impersonate;
-
-    public $rate = 89;
-
-    public $default_chat_id = '-1001456845228';
-
-    public function canImpersonate()
-    {
-        // For example
-        return $this->role == 'admin';
-    }
+    use HasFactory;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'email_verified_at',
-        'parent_id',
+
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function getTimeInAttribute()
+    {
+        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['time_in'])->format('h:i A');
+    }
+    public function getTimeOutAttribute()
+    {
+        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['time_out'])->format('h:i A');
+    }
+    public function getBreakInAttribute()
+    {
+        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['break_in'])->format('h:i A');
+    }
+    public function getBreakOutAttribute()
+    {
+        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['break_out'])->format('h:i A');
+    }
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function positions()
+    {
+        return $this->belongsToMany(Position::class, 'user_positions');
+    }
 
     public function scopeFilters($query, $request)
     {
@@ -58,11 +57,4 @@ class User extends Authenticatable implements MustVerifyEmail
             $query->where('email', '=', $request['user']);
         }
     }
-
-    public const USER_ROLES = [
-        'admin' => 'Admin',
-        'vehicle_manager' => 'Vehicle Manager',
-        'yard_manager' => 'Yard Manager',
-        'viewer' => 'Viewer',
-    ];
 }

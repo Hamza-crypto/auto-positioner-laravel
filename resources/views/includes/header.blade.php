@@ -1,45 +1,25 @@
-<nav class="navbar navbar-expand navbar-light navbar-bg">
-    <a class="sidebar-toggle">
-        <i class="hamburger align-self-center"></i>
-    </a>
-
-    <div class="navbar-collapse collapse">
-        <ul class="navbar-nav navbar-align">
-            <li class="nav-item dropdown">
-                <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
-                    <i class="align-middle" data-feather="settings"></i>
-                </a>
-
-                <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown" aria-expanded="false">
-
-                        <img
-                            src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=293042&color=ffffff"
-                            class="avatar img-fluid rounded-circle mr-1"
-                        />
-
-
-                    <span class="text-dark">{{ auth()->user()->name }}</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{{ route('profile.index', 'account') }}">
-                        <i class="align-middle me-1" data-feather="user"></i> Profile
-                    </a>
-
-                    @impersonating($guard = null)
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ route('impersonate.leave') }}">
-                        <i class="align-middle me-1" data-feather="delete"></i> Leave impersonation
-                    </a>
-
-                    @endImpersonating
-                    <div class="dropdown-divider"></div>
-                    <form method="post" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="dropdown-item">Sign out</button>
-                    </form>
-
-                </div>
-            </li>
-        </ul>
+<div class="header">
+    <div class="menu-toggle-btn">
+        <!-- Menu close button for mobile devices -->
+        <a href="#">
+            <i class="bi bi-list"></i>
+        </a>
     </div>
-</nav>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <img width="100" src="../../assets/images/logo.svg" alt="logo">
+    </a>
+    <!-- ./ Logo -->
+    <div class="page-title"> @yield('title') </div>
+
+    <!-- Header mobile buttons -->
+    <div class="header-mobile-buttons">
+        <a href="#" class="search-bar-btn">
+            <i class="bi bi-search"></i>
+        </a>
+        <a href="#" class="actions-btn">
+            <i class="bi bi-three-dots"></i>
+        </a>
+    </div>
+    <!-- ./ Header mobile buttons -->
+</div>

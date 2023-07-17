@@ -1,59 +1,118 @@
 @extends('layouts.app')
 
-@section('title', __('Add User'))
+@section('title', __('Add New Employee'))
+@section('styles')
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-clockpicker.min.css') }}" type="text/css">
+@endsection
 @section('scripts')
-{{--    <script>--}}
 
-{{--        var asdas ='{{ json_encode($users) }}';--}}
-{{--        $.each(asdas, function(index, item) {--}}
-{{--            console.log(index);--}}
-{{--            // do something with `item` (or `this` is also `item` if you like)--}}
-{{--        });--}}
+<script src="{{ asset('assets/js/bootstrap-clockpicker.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+    $('.clockpicker-example').clockpicker({
+        donetext: 'Done'
+    });
+});
+</script>
 
-{{--    </script>--}}
 @endsection
 @section('content')
+<div class="content ">
 
+    <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8">
+            <div class="tab-content" id="myTabContent">
+                <div id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="mb-4">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6 class="card-title mb-4">Basic Information</h6>
+                                <form method="post" action="{{ route('users.store') }}">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Name</label>
+                                                <input type="text" class="form-control" name="name">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Shift Start</label>
+                                                <div class="input-group clockpicker-example" data-autoclose="true">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="bi bi-clock"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="time_in" class="form-control"
+                                                        placeholder="Select Time">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Break Start</label>
+                                                <div class="input-group clockpicker-example" data-autoclose="true">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="bi bi-clock"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="break_in" class="form-control"
+                                                        placeholder="Select Time">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Positions</label>
+                                                <select class="form-select" name="positions[]" multiple
+                                                    aria-label="multiple select example" style="height: 200px;">
+                                                    <option selected disabled>Select positions</option>
+                                                    @foreach($positions as $position)
+                                                    <option value="{{ $position->id }}">{{ $position->name }}</option>
+                                                    @endforeach
 
+                                                </select>
+                                            </div>
 
-    <h1 class="h3 mb-3">{{ __('Add User') }}</h1>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Age</label>
+                                                <input type="number" name="age" class="form-control">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Shift End</label>
+                                                <div class="input-group clockpicker-example" data-autoclose="true">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="bi bi-clock"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="time_out" class="form-control"
+                                                        placeholder="Select Time">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Break End</label>
+                                                <div class="input-group clockpicker-example" data-autoclose="true">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="bi bi-clock"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="break_out" class="form-control"
+                                                        placeholder="Select Time">
+                                                </div>
+                                            </div>
+                                        </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-
-                    @if(session('success'))
-                        <x-alert type="success">{{ session('success') }}</x-alert>
-                    @endif
-
-                    <form method="post" action="{{ route('users.store') }}">
-                        @csrf
-
-                        <x-input type="text" name="name" label="{{ __('Name') }}" placeholder="{{ __('Enter your name') }}"></x-input>
-                        <x-input type="email" name="email" label="{{ __('Email') }}" placeholder="{{ __('Enter your email') }}"></x-input>
-                        <x-input type="password" name="password" label="{{ __('Password') }}" placeholder="{{ __('Enter your password') }}"></x-input>
-                        <x-input type="password" label="{{ __('Confirm Password') }}" name="password_confirmation" placeholder="{{ __('Enter your password again') }}"></x-input>
-
-                        <div class="form-group">
-                            <label for="role">{{ __('Role') }}</label>
-                            <select id="role" class="form-control select2 @error('role') is-invalid @enderror" name="role" data-toggle="select2">
-                               @foreach(\App\Models\User::USER_ROLES as  $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                            @error('role')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-
-                        <button type="submit" class="btn btn-lg btn-primary">{{ __('Add User') }}</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
 
+</div>
+@endsection

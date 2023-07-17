@@ -1,57 +1,101 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@yield('title') - {{ env('APP_NAME') }} </title>
 
-    <title>@yield('title') - {{ env('APP_NAME') }}</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/images/favicon.png"/>
 
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-    <link class="js-stylesheet" href="{{ asset('assets/css/light.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="{{ asset('assets/icons/bootstrap-icons.min.css') }}" type="text/css">
+    <!-- Bootstrap Docs -->
+    <link rel="stylesheet" href="{{ asset('assets/icons/bootstrap-docs.css') }}" type="text/css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <!-- Main style file -->
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}" type="text/css">
+
+
     @yield('styles')
+    @yield('scripts')
 </head>
+<body>
 
-<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
+<!-- preloader -->
+{{--<div class="preloader">--}}
+{{--    <img src=" {{ asset('assets/img/logo.svg') }}" alt="logo">--}}
 
+{{--    <div class="preloader-icon"></div>--}}
+{{--</div>--}}
+<!-- ./ preloader -->
 
-<div class="wrapper">
+<!-- sidebars -->
 
-    @include('includes.aside')
+<!-- notifications sidebar -->
 
-    <div class="main" >
-        @include('includes.header')
+<!-- ./ notifications sidebar -->
 
-        <main class="content">
-            <div class="container-fluid p-0">
+<!-- settings sidebar -->
 
-                @yield('content')
-            </div>
-        </main>
+<!-- ./ settings sidebar -->
 
-        @include('includes.footer')
-    </div>
+<!-- search sidebar -->
+
+<!-- ./ search sidebar -->
+
+<!-- ./ sidebars -->
+
+<!-- menu -->
+
+@include('includes.aside')
+<!-- ./  menu -->
+
+<!-- layout-wrapper -->
+<div class="layout-wrapper">
+
+    <!-- header -->
+
+    @include('includes.header')
+    <!-- ./ header -->
+
+    <!-- content -->
+
+    @yield('content')
+    <!-- ./ content -->
+
+    <!-- content-footer -->
+@include('includes.footer')
+    <!-- ./ content-footer -->
+
 </div>
+<!-- ./ layout-wrapper -->
+
+<!-- Bundle scripts -->
 
 
-<script src="{{ asset('/assets/js/app.js') }}"></script>
+<!-- Examples -->
+<script src="{{ asset('assets/js/users.js') }}"></script>
 
-{{--<script src="{{ mix('/js/app.js') }}"></script>--}}
+<!-- Main Javascript file -->
+<script src="{{ asset('assets/js/app.js') }}"></script>
 
-<script>
-    $(".select2").each(function () {
-        $(this).select2();
-    })
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.2/sweetalert2.all.min.js"></script>
-<script src="{{ asset('assets/js/alerts.js') }}"></script>
 
-@yield('alert')
-@yield('scripts')
+<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css
+" rel="stylesheet">
 
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js
+"></script>
 </body>
-
 </html>

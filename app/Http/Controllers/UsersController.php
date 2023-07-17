@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,61 +12,65 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::with('positions:name')->get();
 
         return view('pages.users.index', compact('users'));
     }
 
     public function create()
     {
-        $users = User::all();
-
-        return view('pages.users.add', compact('users'));
+        $positions = Position::all();
+        return view('pages.users.add', get_defined_vars());
     }
 
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
-        //dd($request->all());
-        if ($request->parent == 0) {
-            $request->parent = null;
-        }
-        User::create(
-            [
-                'name' => $request->name,
-                'email_verified_at' => now(),
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
-                'role' => $request->role,
-            ]);
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->age = $request->input('age');
+        $user->time_in = $request->input('time_in');
+        $user->time_out = $request->input('time_out');
+        $user->break_in = $request->input('break_in');
+        $user->break_out = $request->input('break_out');
 
-        Session::flash('success', 'User successfully added.');
+        $user->save();
 
-        return redirect()->route('users.create');
+        // Attach positions to the user (assuming "positions" is a many-to-many relationship)
+        $user->positions()->attach($request->input('positions'));
+
+        // Redirect the user to a success page or any other page as per your requirement
+        return redirect()->route('users.index')->with('success', 'User information stored successfully!');
     }
 
     public function edit(User $user)
     {
-        return view('pages.users.edit',
-            [
-                'user' => $user,
-                'tab' => 'account',
-            ]);
+        $positions = Position::all();
+
+        $user_positions = array_map(function ($item) {
+            return $item['id'];
+        }, $user->positions->toArray());
+
+        return view('pages.users.edit', get_defined_vars());
+
     }
 
     public function update(User $user, Request $request)
     {
+        $user->name = $request->input('name');
+        $user->age = $request->input('age');
+        $user->time_in = $request->input('time_in');
+        $user->time_out = $request->input('time_out');
+        $user->break_in = $request->input('break_in');
+        $user->break_out = $request->input('break_out');
 
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'unique:users,email,'.$user->id,
-            'role' => 'required',
-        ]);
+        $positions = $request->input('positions', []); // Get the positions from the request (assuming it's an array)
+        $user->positions()->sync($positions);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-        ]);
+        // Save the updated user record
+        $user->save();
+
+// Redirect the user to a success page or any other page as per your requirement
+        return redirect()->route('users.index')->with('success', 'User information updated successfully!');
 
         Session::flash('success', __('Account information successfully updated.'));
 

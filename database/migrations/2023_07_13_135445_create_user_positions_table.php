@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('positions', function (Blueprint $table) {
+        Schema::create('user_positions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('count');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('position_id');
+
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+//            $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
         });
     }
 
