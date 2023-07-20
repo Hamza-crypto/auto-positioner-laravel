@@ -12,6 +12,16 @@
 
             <li class="menu-divider">Manage</li>
             <li class="">
+                <a href="{{ route('dashboard.index')}}">
+                    <span class="nav-link-icon">
+
+                        <i class="bi bi-card-checklist"></i>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+            </li>
+            <li class="">
                 <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-circle"></i>
@@ -30,7 +40,8 @@
             <li class="">
                 <a href="#">
                     <span class="nav-link-icon">
-                        <i class="bi bi-person-circle"></i>
+
+                        <i class="bi bi-command"></i>
                     </span>
                     <span>Positions</span>
                     <i class="sub-menu-arrow bi bi-arrow-right"></i>

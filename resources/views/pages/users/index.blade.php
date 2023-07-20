@@ -32,8 +32,8 @@ function confirmDelete(event, formElement) {
     })
 
 }
-console.log($('#users-table'));
 </script>
+<!-- <script src="{{ asset('assets/js/users.js') }}"></script> -->
 @endsection
 
 @section('content')

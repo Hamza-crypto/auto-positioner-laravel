@@ -40,7 +40,7 @@
 
             }],
             xaxis: {
-                categories:  [ "<?php echo implode('","', $labels )?>"],
+                categories:  [ "<?php echo implode('","', $labels)?>"],
             },
             yaxis: {
                 title: {

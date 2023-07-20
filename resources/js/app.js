@@ -9,17 +9,6 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
-//support vuex
-import Vuex from 'vuex'
-import VueEasyLightbox from 'vue-easy-lightbox'
-
-Vue.use(Vuex)
-Vue.use(VueEasyLightbox)
-import storeData from "./store/index"
-
-const store = new Vuex.Store(
-    storeData
-)
 
 /**
  * The following block of code may be used to automatically register your
@@ -32,10 +21,10 @@ const store = new Vuex.Store(
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-
-Vue.component('active-trades', require('./components/ActiveTrades.vue').default);
-Vue.component('trade-messages', require('./components/Messages.vue').default);
-Vue.component('trade-messages-completed', require('./components/Messages_completed.vue').default);
+Vue.component('positions', require('./components/Positions.vue').default);
+// Vue.component('active-trades', require('./components/ActiveTrades.vue').default);
+// Vue.component('trade-messages', require('./components/Messages.vue').default);
+// Vue.component('trade-messages-completed', require('./components/Messages_completed.vue').default);
 
 
 /**
@@ -45,6 +34,5 @@ Vue.component('trade-messages-completed', require('./components/Messages_complet
  */
 
 const app = new Vue({
-    el: '#app',
-    store,  //vuex
+    el: '#app'
 });

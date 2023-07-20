@@ -1,6 +1,6 @@
-
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +8,7 @@
     <title>@yield('title') - {{ env('APP_NAME') }} </title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="../../assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="../../assets/images/favicon.png" />
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -24,78 +24,40 @@
     <!-- Main style file -->
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}" type="text/css">
 
-
     @yield('styles')
     @yield('scripts')
 </head>
+
 <body>
 
-<!-- preloader -->
-{{--<div class="preloader">--}}
-{{--    <img src=" {{ asset('assets/img/logo.svg') }}" alt="logo">--}}
+    @include('includes.aside')
 
-{{--    <div class="preloader-icon"></div>--}}
-{{--</div>--}}
-<!-- ./ preloader -->
+    <div class="layout-wrapper">
 
-<!-- sidebars -->
+        @include('includes.header')
 
-<!-- notifications sidebar -->
+        <!-- content -->
+        <div class="content" id="app">
+            @yield('content')
+        </div>
+        <!-- ./ content -->
 
-<!-- ./ notifications sidebar -->
+        @include('includes.footer')
 
-<!-- settings sidebar -->
+    </div>
 
-<!-- ./ settings sidebar -->
+    <!-- Main Javascript file -->
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 
-<!-- search sidebar -->
-
-<!-- ./ search sidebar -->
-
-<!-- ./ sidebars -->
-
-<!-- menu -->
-
-@include('includes.aside')
-<!-- ./  menu -->
-
-<!-- layout-wrapper -->
-<div class="layout-wrapper">
-
-    <!-- header -->
-
-    @include('includes.header')
-    <!-- ./ header -->
-
-    <!-- content -->
-
-    @yield('content')
-    <!-- ./ content -->
-
-    <!-- content-footer -->
-@include('includes.footer')
-    <!-- ./ content-footer -->
-
-</div>
-<!-- ./ layout-wrapper -->
-
-<!-- Bundle scripts -->
-
-
-<!-- Examples -->
-<script src="{{ asset('assets/js/users.js') }}"></script>
-
-<!-- Main Javascript file -->
-<script src="{{ asset('assets/js/app.js') }}"></script>
-
-
-
-<link href="
+    <link href="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css
 " rel="stylesheet">
 
-<script src="
+    <script src="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js
 "></script>
+
+    <script src="{{ mix('/js/app.js') }}"></script>
 </body>
+
 </html>
