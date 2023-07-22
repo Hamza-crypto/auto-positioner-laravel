@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('dashboard/table', [DashboardController::class, 'get_table'])->name('dashboard.table');
 Route::resource('users', UsersController::class);
 Route::resource('employees', EmployeesController::class);
 Route::resource('positions', PositionController::class);

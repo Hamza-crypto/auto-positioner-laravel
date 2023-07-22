@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->time('time_out');
             $table->time('break_in');
             $table->time('break_out');
+            $table->json('position_ids');
             $table->timestamps();
         });
     }

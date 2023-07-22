@@ -30,19 +30,19 @@
 
 <body>
 
-    @include('includes.aside')
+    <!-- @include('includes.aside') -->
 
-    <div class="layout-wrapper">
+    <!-- <div class="layout-wrapper"> -->
 
-        @include('includes.header')
+    @include('includes.header')
 
-        <!-- content -->
-        <div class="content" id="app">
-            @yield('content')
-        </div>
-        <!-- ./ content -->
+    <!-- content -->
+    <div class="content" id="app">
+        @yield('content')
+    </div>
+    <!-- ./ content -->
 
-        @include('includes.footer')
+    @include('includes.footer')
 
     </div>
 

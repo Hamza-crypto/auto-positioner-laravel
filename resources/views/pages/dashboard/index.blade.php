@@ -148,51 +148,28 @@ $(document).ready(function() {
                             class="tab-pane fade active show">
                             <div class="list-group list-group-flush" id="employees">
 
-                                <a href="#" class="list-group-item d-flex align-items-center">
-                                    <div class="pe-3">
-                                        <div class="avatar avatar-info avatar-state-secondary"><span
-                                                class="avatar-text rounded-circle">T</span></div>
-                                    </div>
-                                    <div>
-                                        <p class="mb-1">Employee 1</p>
-                                        <div class="text-muted d-flex align-items-center"><i
-                                                class="bi bi-arrow-down me-1 text-danger small"></i>
-                                            Today, 03:11 AM
-                                        </div>
-                                    </div>
-                                    <div class="text-end ms-auto"><i class="bi bi-camera-video text-danger"></i></div>
-                                </a>
-
-                                <a href="#" class="list-group-item d-flex align-items-center">
-                                    <div class="pe-3">
-                                        <div class="avatar avatar-info avatar-state-secondary"><span
-                                                class="avatar-text rounded-circle">T</span></div>
-                                    </div>
-                                    <div>
-                                        <p class="mb-1">Employee 2</p>
-                                        <div class="text-muted d-flex align-items-center"><i
-                                                class="bi bi-arrow-down me-1 text-danger small"></i>
-                                            Today, 03:11 AM
-                                        </div>
-                                    </div>
-                                    <div class="text-end ms-auto"><i class="bi bi-camera-video text-danger"></i></div>
-                                </a>
+                                @foreach($employees as $employee)
 
                                 <a href="#" class="list-group-item d-flex align-items-center">
                                     <div class="pe-3">
                                         <div class="avatar avatar-info avatar-state-secondary">
-                                            <span class="avatar-text rounded-circle">T</span>
+                                            <span class="avatar-text rounded-circle"> {{ $employee->id }}
+                                            </span>
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="mb-1">Employee 3</p>
-                                        <div class="text-muted d-flex align-items-center"><i
-                                                class="bi bi-arrow-down me-1 text-danger small"></i>
-                                            Today, 03:11 AM
+                                        <p class="mb-1">{{ $employee->name }}</p>
+                                        <div class="text-muted d-flex align-items-center">
+
+                                            {{ $employee->time_in }} - {{ $employee->time_out }}
                                         </div>
                                     </div>
                                     <div class="text-end ms-auto"><i class="bi bi-camera-video text-danger"></i></div>
                                 </a>
+                                @endforeach
+
+
+
 
                             </div>
                         </div>
