@@ -32,6 +32,7 @@ class UsersController extends Controller
         $user->time_out = $request->input('time_out');
         $user->break_in = $request->input('break_in');
         $user->break_out = $request->input('break_out');
+        $user->position_ids = json_encode($request->input('positions'));
 
         $user->save();
 
