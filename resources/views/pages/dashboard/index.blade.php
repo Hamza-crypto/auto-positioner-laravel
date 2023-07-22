@@ -4,14 +4,30 @@
 
 @section('content')
 
+@section('styles')
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+</style>
+@endsection
+
 @section('scripts')
 <!-- <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.11/lib/draggable.bundle.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
 <script>
 $(document).ready(function() {
-    var employees = document.getElementById('employees');
-    var positions = document.getElementById('positions');
+    var employees = document.getElementById('all-employees');
+    var positions = document.getElementById('present-employees');
 
 
 
@@ -88,7 +104,29 @@ $(document).ready(function() {
 
 });
 </script>
+
+<script>
+$(document).ready(function() {
+
+    // Function to send the AJAX request and update the table
+    function updateTable() {
+        $.get('/dashboard/table', function(response) {
+            $('#table-body').html(response);
+        });
+    }
+
+    // Initial AJAX request on page load
+    updateTable();
+
+    // Set interval to call the updateTable function every 3 seconds
+    setInterval(updateTable, 1500); // 3000 milliseconds = 3 seconds
+
+});
+</script>
+
+
 @endsection
+
 
 @if(session('success'))
 <x-alert type="success">{{ session('success') }}</x-alert>
@@ -99,54 +137,64 @@ $(document).ready(function() {
 @endif
 
 <div class="row">
-    <div class="col-9">
+    <div class="col-6">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    @foreach ($positions as $position)
+                    <th>{{ $position->name }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
 
+    <div class="col-3">
 
-        <div class="row g-4 mb-4" id="positions">
-            <div class="col-md-2" data-id="position1">
-                <div class="card bg-cyan text-white-90">
-                    <div class="card-body d-flex align-items-center">
-                        <i class="bi bi-box-seam display-7 me-3"></i>
-                        <div>
-                            <span>Runner 1</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2" data-id="position2">
-                <div class="card bg-purple text-white-90">
-                    <div class="card-body d-flex align-items-center">
-                        <i class="bi bi-heart display-7 me-3"></i>
-                        <div>
+        <div class="chat-block">
 
-                            <span>Runner 2</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2" data-id="position3">
-                <div class="card bg-teal text-white-90">
-                    <div class="card-body d-flex align-items-center">
-                        <i class="bi bi-wallet2 display-7 me-3"></i>
-                        <div>
+            <div class="chat-sidebar">
+                <h1>Present Employees </h1>
 
-                            <span>Fryer</span>
+                <div tabindex="1" class="chat-sidebar-content" style="overflow: hidden; outline: none;">
+
+                    <div id="pills-tabContent" class="tab-content">
+                        <div id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                            class="tab-pane fade active show">
+                            <div class="list-group list-group-flush" id="present-employees"
+                                style="border: solid black; min-height:100px;">
+
+                                <a href="#" class="list-group-item d-flex align-items-center" id="drop-employees">
+
+                                    <div>
+                                        <p class="mb-1"> Drop employees here </p>
+                                    </div>
+
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
     <div class="col-3">
 
         <div class="chat-block">
+
             <div class="chat-sidebar">
+                <h1>All Employees </h1>
                 <div tabindex="1" class="chat-sidebar-content" style="overflow: hidden; outline: none;">
+
                     <div id="pills-tabContent" class="tab-content">
                         <div id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
                             class="tab-pane fade active show">
-                            <div class="list-group list-group-flush" id="employees">
+                            <div class="list-group list-group-flush" id="all-employees"
+                                style="border: solid black; min-height:100px;">
 
                                 @foreach($employees as $employee)
 
@@ -164,13 +212,11 @@ $(document).ready(function() {
                                             {{ $employee->time_in }} - {{ $employee->time_out }}
                                         </div>
                                     </div>
-                                    <div class="text-end ms-auto"><i class="bi bi-camera-video text-danger"></i></div>
+                                    <div class="text-end ms-auto">
+                                        {{ $employee->positions[0]->name }}
+                                    </div>
                                 </a>
                                 @endforeach
-
-
-
-
                             </div>
                         </div>
                     </div>
