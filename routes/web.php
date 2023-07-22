@@ -64,3 +64,5 @@ Route::resource('positions', PositionController::class);
 
 Route::get('next_vehicle_id', [DatatableController::class, 'next_vehicle_id']);
 Route::get('delete_unsaved_vehicles', [VehicleController::class, 'delete_unsaved_vehicles']);
+
+//Test
