@@ -41,9 +41,9 @@ $(document).ready(function() {
     });
 });
 </script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.11/lib/draggable.bundle.js"></script> -->
+
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<!-- <script src="{{ asset('assets/js/modal.js') }}"></script> -->
+
 <script>
 $(document).ready(function() {
     var all_employees = document.getElementById('all-employees');
@@ -139,10 +139,5 @@ $(document).ready(function() {
 @endif
 
 <positions></positions>
-
-
-
-<!-- @include('pages.dashboard._inc.modal') -->
-
 
 @endsection
