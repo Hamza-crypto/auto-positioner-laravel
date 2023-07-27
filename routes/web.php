@@ -36,7 +36,7 @@ Route::get('/reset-all', function () {
 });
 
 Route::group(['middleware' => ['securit_key']], function () {
-
+//
 });
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
