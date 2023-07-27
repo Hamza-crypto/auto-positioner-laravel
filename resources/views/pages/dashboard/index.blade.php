@@ -17,88 +17,90 @@ td {
     padding: 8px;
     text-align: center;
 }
+
+.avatar.avatar-state-secondary:before {
+    display: none;
+}
 </style>
+
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-clockpicker.min.css') }}" type="text/css">
 @endsection
 
 @section('scripts')
-<!-- <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.11/lib/draggable.bundle.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
+<script src="{{ asset('assets/js/bootstrap-clockpicker.min.js') }}"></script>
 <script>
 $(document).ready(function() {
-    var employees = document.getElementById('all-employees');
-    var positions = document.getElementById('present-employees');
+    // hamza
+    $('.clockpicker-example').clockpicker({
+        donetext: 'Done',
+        afterDone: function() {
+            console.log("after done");
+        }
 
+    });
+});
+</script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.11/lib/draggable.bundle.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<!-- <script src="{{ asset('assets/js/modal.js') }}"></script> -->
+<script>
+$(document).ready(function() {
+    var all_employees = document.getElementById('all-employees');
+    var present_employees = document.getElementById('present-employees');
+    var positions = document.getElementById('positions');
+    var positions2 = document.getElementById('positions2');
 
-
-
-    // var sortable = Sortable.create(el, {
-    //     group: 'shared'
-    // });
-
-    // var el = document.getElementById('positions');
-    // var sortable = Sortable.create(el, {
-    //     group: 'shared'
-    // });
-
-    const employeesList = new Sortable(employees, {
+    const all_employees_object = new Sortable(all_employees, {
         group: 'shared',
         animation: 150,
+        onStart: function(evt) {
+            console.log("Sorting started. Element:", evt.item);
+        },
+        onEnd: function(evt) {
+            console.log("Sorting ended. Element:", evt.item);
+        },
+        onAdd: function(evt) {
+            console.log("Item added to list. Element:", evt.item);
+        },
+        onUpdate: function(evt) {
+            console.log("Item updated within the list. Element:", evt.item);
+        },
+        onRemove: function(evt) {
+            console.log("Item removed from list. Element:", evt.item);
+        },
     });
 
-    const positionsList = new Sortable(positions, {
+    const present_employees_object = new Sortable(present_employees, {
         group: 'shared',
         animation: 150,
+        onEnd: function(evt) {
+            console.log(evt.item);
+
+
+            const nameElement = evt.item.querySelector(".mb-1");
+
+            // Extract the name (textContent) from the <p> element
+            const name = nameElement.textContent.trim();
+
+            console.log("Name:", name);
+
+            // Optional: Remove the original item from the first list (comment this line if you want to keep the original)
+            // evt.from.removeChild(evt.item);
+        },
     });
 
-    console.log(employeesList);
-    employeesList.on('sort', (evt) => {
-        const employeeId = evt.item.getAttribute('data-id');
-        const currentPosition = evt.from;
-        const newPosition = evt.to;
+    const positions_object = new Sortable(positions, {
+        group: 'shared',
+        animation: 150,
 
-        // Check if the item is being moved from the employees list to a position list
-        if (currentPosition.classList.contains('employees') && newPosition.classList.contains(
-                'positions')) {
-            // Your logic to add the employee to the position
-            const positionId = newPosition.getAttribute('data-id');
-            // ... Add the employee with the corresponding ID to the position using AJAX or other methods
 
-            // Remove the placeholder if an employee is added to the position
-            const placeholder = newPosition.querySelector('.placeholder');
-            if (placeholder) {
-                placeholder.remove();
-            }
-
-            // Optionally, you can remove the employee from the previous position if needed
-            // ...
-
-            // Perform any other necessary actions
-            // ...
-        }
     });
 
-    positionsList.on('sort', (evt) => {
-        const position = evt.item;
-        const currentPosition = evt.from;
-        const newPosition = evt.to;
+    const positions_object2 = new Sortable(positions2, {
+        group: 'shared',
+        animation: 150,
 
-        // Check if the item is being moved from a position list to the employees list (i.e., removed from a position)
-        if (currentPosition.classList.contains('positions') && newPosition.classList.contains(
-                'employees')) {
-            // Your logic to remove the employee from the position
-            const employeeId = position.getAttribute('data-id');
-            // ... Remove the employee with the corresponding ID from the position using AJAX or other methods
-
-            // Add a placeholder for the empty position
-            const placeholder = document.createElement('div');
-            placeholder.classList.add('placeholder');
-            placeholder.textContent = 'Empty Position';
-            newPosition.appendChild(placeholder);
-
-            // Perform any other necessary actions
-            // ...
-        }
     });
 
 
@@ -119,7 +121,7 @@ $(document).ready(function() {
     updateTable();
 
     // Set interval to call the updateTable function every 3 seconds
-    setInterval(updateTable, 1500); // 3000 milliseconds = 3 seconds
+    setInterval(updateTable, 150000); // 3000 milliseconds = 3 seconds
 
 });
 </script>
@@ -136,95 +138,11 @@ $(document).ready(function() {
 <x-alert type="warning">{{ session('warning') }}</x-alert>
 @endif
 
-<div class="row">
-    <div class="col-6">
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    @foreach ($positions as $position)
-                    <th>{{ $position->name }}</th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody id="table-body">
-            </tbody>
-        </table>
-    </div>
+<positions></positions>
 
-    <div class="col-3">
 
-        <div class="chat-block">
 
-            <div class="chat-sidebar">
-                <h1>Present Employees </h1>
-
-                <div tabindex="1" class="chat-sidebar-content" style="overflow: hidden; outline: none;">
-
-                    <div id="pills-tabContent" class="tab-content">
-                        <div id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
-                            class="tab-pane fade active show">
-                            <div class="list-group list-group-flush" id="present-employees"
-                                style="border: solid black; min-height:100px;">
-
-                                <a href="#" class="list-group-item d-flex align-items-center" id="drop-employees">
-
-                                    <div>
-                                        <p class="mb-1"> Drop employees here </p>
-                                    </div>
-
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-3">
-
-        <div class="chat-block">
-
-            <div class="chat-sidebar">
-                <h1>All Employees </h1>
-                <div tabindex="1" class="chat-sidebar-content" style="overflow: hidden; outline: none;">
-
-                    <div id="pills-tabContent" class="tab-content">
-                        <div id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
-                            class="tab-pane fade active show">
-                            <div class="list-group list-group-flush" id="all-employees"
-                                style="border: solid black; min-height:100px;">
-
-                                @foreach($employees as $employee)
-
-                                <a href="#" class="list-group-item d-flex align-items-center">
-                                    <div class="pe-3">
-                                        <div class="avatar avatar-info avatar-state-secondary">
-                                            <span class="avatar-text rounded-circle"> {{ $employee->id }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="mb-1">{{ $employee->name }}</p>
-                                        <div class="text-muted d-flex align-items-center">
-
-                                            {{ $employee->time_in }} - {{ $employee->time_out }}
-                                        </div>
-                                    </div>
-                                    <div class="text-end ms-auto">
-                                        {{ $employee->positions[0]->name }}
-                                    </div>
-                                </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- @include('pages.dashboard._inc.modal') -->
 
 
 @endsection

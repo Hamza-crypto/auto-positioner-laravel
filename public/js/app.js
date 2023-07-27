@@ -2069,15 +2069,28 @@ __webpack_require__.r(__webpack_exports__);
   props: [''],
   data: function data() {
     return {
-      name: 'Helo hamza'
+      employees: []
     };
   },
   mounted: function mounted() {
-    console.log('Message BG  Component mounted.');
-    this.myMethod();
+    this.get_employees();
+    $('.clockpicker-example').clockpicker({
+      donetext: 'Done',
+      afterDone: function afterDone() {
+        console.log("after done");
+      }
+    });
   },
   methods: {
-    myMethod: function myMethod() {
+    get_employees: function get_employees() {
+      var _this = this;
+      var URL = '/api/v1/employees';
+      axios.get(URL).then(function (response) {
+        _this.employees = response.data;
+        console.log(_this.employees);
+      })["catch"](function (error) {
+        console.log(error);
+      });
       console.log('Getting Messages BG...');
     }
   }
@@ -2100,9 +2113,136 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", [_c("h1", [_vm._v("I am from Vue component " + _vm._s(this.name) + " ")])]);
+  return _c("div", {
+    staticClass: "row"
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("div", {
+    staticClass: "chat-block"
+  }, [_c("div", {
+    staticClass: "chat-sidebar",
+    staticStyle: {
+      width: "100%"
+    }
+  }, [_c("div", {
+    staticClass: "chat-sidebar-content",
+    staticStyle: {
+      overflow: "hidden",
+      outline: "none"
+    },
+    attrs: {
+      tabindex: "1"
+    }
+  }, [_c("div", {
+    staticClass: "tab-content",
+    attrs: {
+      id: "pills-tabContent"
+    }
+  }, [_c("div", {
+    staticClass: "tab-pane fade active show",
+    attrs: {
+      id: "pills-profile",
+      role: "tabpanel",
+      "aria-labelledby": "pills-profile-tab"
+    }
+  }, [_c("div", {
+    staticClass: "list-group list-group-flush",
+    staticStyle: {
+      border: "solid #eb2f516b",
+      "min-height": "100px"
+    },
+    attrs: {
+      id: "all-employees"
+    }
+  }, [_vm._m(1), _vm._v(" "), _vm._l(_vm.employees, function (employee) {
+    return _c("a", {
+      key: employee.id,
+      staticClass: "list-group-item d-flex align-items-center",
+      attrs: {
+        href: "#"
+      }
+    }, [_c("div", {
+      staticClass: "pe-3"
+    }, [_c("div", {
+      staticClass: "avatar avatar-info avatar-state-secondary"
+    }, [_c("span", {
+      staticClass: "avatar-text rounded-circle"
+    }, [_vm._v(" " + _vm._s(employee.id) + "\n                                            ")])])]), _vm._v(" "), _c("div", [_c("p", {
+      staticClass: "mb-1"
+    }, [_vm._v(_vm._s(employee.name))]), _vm._v(" "), _vm._m(2, true)]), _vm._v(" "), _vm._l(employee.positions, function (position) {
+      return _c("div", {
+        staticClass: "text-end ms-auto"
+      }, [_vm._v(_vm._s(position) + " \n                                    ")]);
+    })], 2);
+  })], 2)])])])])])])]);
 };
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "col-3"
+  }, [_c("div", {
+    staticClass: "card mb-3"
+  }, [_c("div", {
+    staticClass: "card-body",
+    attrs: {
+      id: "positions"
+    }
+  }, [_c("a", {
+    staticClass: "list-group-item d-flex align-items-center disabled fixed-item",
+    attrs: {
+      href: "#"
+    }
+  }, [_c("div", [_c("p", {
+    staticClass: "mb-1"
+  }, [_vm._v(" Fryer ")])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "card"
+  }, [_c("div", {
+    staticClass: "card-body",
+    attrs: {
+      id: "positions2"
+    }
+  }, [_c("a", {
+    staticClass: "list-group-item d-flex align-items-center disabled",
+    attrs: {
+      href: "#"
+    }
+  }, [_c("div", [_c("p", {
+    staticClass: "mb-1"
+  }, [_vm._v(" Fryer ")])])])])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("a", {
+    staticClass: "list-group-item d-flex align-items-center disabled",
+    attrs: {
+      href: "#",
+      id: "drop-employees"
+    }
+  }, [_c("div", [_c("p", {
+    staticClass: "mb-1"
+  }, [_vm._v(" All Employees ")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "text-muted d-flex align-items-center"
+  }, [_c("input", {
+    staticClass: "form-control clockpicker-example",
+    attrs: {
+      type: "text",
+      name: "time_in",
+      placeholder: "Start Time"
+    }
+  }), _vm._v(" "), _c("input", {
+    staticClass: "form-control clockpicker-example",
+    attrs: {
+      type: "text",
+      name: "time_out",
+      placeholder: "End Time"
+    }
+  })]);
+}];
 render._withStripped = true;
 
 

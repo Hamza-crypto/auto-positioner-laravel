@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
                 'time_out' => '17:00:00',
                 'break_in' => '12:30:00',
                 'break_out' => '13:15:00',
-                'position_ids' => [1, 2],
+                'position_ids' => json_encode(['6', '2']),
             ],
             [
                 'name' => 'Alicia',
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
                 'time_out' => '16:00:00',
                 'break_in' => '12:45:00',
                 'break_out' => '13:30:00',
-                'position_ids' => [2],
+                'position_ids' => json_encode(['2']),
             ],
             [
                 'name' => 'Jack',
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
                 'time_out' => '15:00:00',
                 'break_in' => '12:10:00',
                 'break_out' => '12:40:00',
-                'position_ids' => [2, 3],
+                'position_ids' => json_encode(['2', '3']),
 
             ],
             [
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
                 'time_out' => '15:00:00',
                 'break_in' => '12:10:00',
                 'break_out' => '12:40:00',
-                'position_ids' => [3, 4],
+                'position_ids' => json_encode(['3', '4']),
             ],
             [
                 'name' => 'Emily',
@@ -57,12 +57,11 @@ class DatabaseSeeder extends Seeder
                 'time_out' => '17:00:00',
                 'break_in' => '13:20:00',
                 'break_out' => '13:50:00',
-                'position_ids' => [5, 6],
+                'position_ids' => json_encode(['5', '6']),
             ],
         ];
 
         foreach ($employees as $employee) {
-            $employee['position_ids'] = json_encode($employee['position_ids']);
 
             $employee_id = User::create($employee)->id;
             $limit = rand(1, 3);

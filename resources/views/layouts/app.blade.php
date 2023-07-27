@@ -26,6 +26,7 @@
 
     @yield('styles')
     @yield('scripts')
+
 </head>
 
 <body>
@@ -45,6 +46,7 @@
         @include('includes.footer')
 
     </div>
+
 
     <!-- Main Javascript file -->
     <script src="{{ asset('assets/js/app.js') }}"></script>

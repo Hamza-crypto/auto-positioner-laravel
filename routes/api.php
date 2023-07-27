@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\EmployeesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
-Route::get('v1/userttt', function (Request $request) {
-    return "Hamza is good";
-});
+Route::get('v1/employees', [EmployeesController::class, 'index'])->name('employees.index');
