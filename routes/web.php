@@ -29,6 +29,7 @@ Route::get('/reset', function () {
 
 Route::get('/reset-all', function () {
 
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
     \Illuminate\Support\Facades\Artisan::call('db:seed');
 
