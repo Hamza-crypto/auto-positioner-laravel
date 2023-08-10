@@ -38,7 +38,7 @@
         @include('includes.header')
 
         <!-- content -->
-        <div class="content" id="app">
+        <div class="content">
             @yield('content')
         </div>
         <!-- ./ content -->
@@ -51,6 +51,7 @@
     <!-- Main Javascript file -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
+
     <link href="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css
 " rel="stylesheet">
@@ -60,6 +61,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js
 "></script>
 
     <script src="{{ mix('/js/app.js') }}"></script>
+
+
+
 </body>
 
-</html>
+< /html>

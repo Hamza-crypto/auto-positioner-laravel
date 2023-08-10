@@ -5,9 +5,13 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+// require('./bootstrap');
 
-window.Vue = require('vue').default;
+// window.Vue = require('vue').default;
+// import '@pencilpix/vue2-clock-picker/dist/vue2-clock-picker.min.css';
+// const VueClockPickerPlugin = require('@pencilpix/vue2-clock-picker/dist/vue2-clock-picker.plugin.js')
+// Vue.use(VueClockPickerPlugin)
+
 
 
 /**
@@ -21,7 +25,7 @@ window.Vue = require('vue').default;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('positions', require('./components/Positions.vue').default);
+// Vue.component('positions', require('./components/Positions.vue').default);
 // Vue.component('active-trades', require('./components/ActiveTrades.vue').default);
 // Vue.component('trade-messages', require('./components/Messages.vue').default);
 // Vue.component('trade-messages-completed', require('./components/Messages_completed.vue').default);
@@ -33,6 +37,6 @@ Vue.component('positions', require('./components/Positions.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app'
-});
+// const app = new Vue({
+//     el: '#app'
+// });
