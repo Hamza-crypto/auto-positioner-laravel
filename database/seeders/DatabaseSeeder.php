@@ -16,48 +16,22 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'John',
                 'age' => 16,
-                'time_in' => '08:00:00',
-                'time_out' => '17:00:00',
-                'break_in' => '12:30:00',
-                'break_out' => '13:15:00',
-                'position_ids' => json_encode(['6', '2']),
             ],
             [
                 'name' => 'Alicia',
                 'age' => 19,
-                'time_in' => '08:30:00',
-                'time_out' => '16:00:00',
-                'break_in' => '12:45:00',
-                'break_out' => '13:30:00',
-                'position_ids' => json_encode(['2']),
             ],
             [
                 'name' => 'Jack',
                 'age' => 24,
-                'time_in' => '09:00:00',
-                'time_out' => '15:00:00',
-                'break_in' => '12:10:00',
-                'break_out' => '12:40:00',
-                'position_ids' => json_encode(['2', '3']),
-
             ],
             [
                 'name' => 'Davis',
                 'age' => 20,
-                'time_in' => '09:30:00',
-                'time_out' => '15:00:00',
-                'break_in' => '12:10:00',
-                'break_out' => '12:40:00',
-                'position_ids' => json_encode(['3', '4']),
             ],
             [
                 'name' => 'Emily',
                 'age' => 22,
-                'time_in' => '10:00:00',
-                'time_out' => '17:00:00',
-                'break_in' => '13:20:00',
-                'break_out' => '13:50:00',
-                'position_ids' => json_encode(['5', '6']),
             ],
         ];
 

@@ -17,6 +17,7 @@ use Spatie\DiscordAlerts\Facades\DiscordAlert;
 | contains the "web" middleware group. Now create something great!
 |
  */
+
 Route::get('/test', function () {
     DiscordAlert::message("test message");
 });
@@ -24,7 +25,6 @@ Route::get('/test', function () {
 Route::redirect('/', '/dashboard');
 
 Route::get('/reset', function () {
-
 });
 
 Route::get('/reset-all', function () {
@@ -32,15 +32,16 @@ Route::get('/reset-all', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
     \Illuminate\Support\Facades\Artisan::call('db:seed');
-
 });
 
 Route::group(['middleware' => ['securit_key']], function () {
-//
+    //
 });
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-Route::get('dashboard/table', [DashboardController::class, 'get_table'])->name('dashboard.table');
 Route::resource('users', UsersController::class);
 Route::resource('employees', EmployeesController::class);
 Route::resource('positions', PositionController::class);
+
+
+Route::post('/employee/schedule', [DashboardController::class, 'displayEmployeeSchedule'])->name('employeeSchedule');

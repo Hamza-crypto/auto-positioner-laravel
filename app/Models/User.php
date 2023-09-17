@@ -15,25 +15,22 @@ class User extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+    protected $fillable = ['name', 'age'];
 
-    ];
+    public function userPositions()
+    {
+        return $this->hasMany(UserPosition::class);
+    }
 
-    public function getTimeInAttribute()
+    // Add this method to enable cascading delete
+    public static function boot()
     {
-        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['time_in'])->format('h:i A');
-    }
-    public function getTimeOutAttribute()
-    {
-        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['time_out'])->format('h:i A');
-    }
-    public function getBreakInAttribute()
-    {
-        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['break_in'])->format('h:i A');
-    }
-    public function getBreakOutAttribute()
-    {
-        return \Carbon\Carbon::createFromFormat('H:i:s', $this->attributes['break_out'])->format('h:i A');
+        parent::boot();
+
+        // When a user is deleted, also delete related user positions
+        static::deleting(function ($user) {
+            $user->userPositions()->delete();
+        });
     }
 
     public function positions()

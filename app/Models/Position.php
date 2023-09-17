@@ -12,8 +12,9 @@ class Position extends Model
     protected $fillable = ['name', 'count'];
 
     public $timestamps = false;
+
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_positions');
     }
 }

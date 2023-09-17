@@ -17,11 +17,6 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('age');
-            $table->time('time_in');
-            $table->time('time_out');
-            $table->time('break_in');
-            $table->time('break_out');
-            $table->json('position_ids');
             $table->timestamps();
         });
     }

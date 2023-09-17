@@ -36,23 +36,17 @@
 
     <script>
         $(document).ready(function() {
-            var allEmployees = ".clockpicker-example";
-            initializeClockpicker(allEmployees);
-        });
-
-        function initializeClockpicker(selector) {
-
-            $(selector).clockpicker({
+            $('.clockpicker-example').clockpicker({
                 donetext: 'Done'
             });
 
             var selectedEmployeeId = null;
 
 
-            //...............handle the time entering and appending.................
+            //step1...............accessing the data after the time is set.................
 
 
-            $(selector).on('change', function() {
+            $('.clockpicker-example').on('change', function() {
 
                 //accessing list group item
                 const $employeeItem = $(this).closest('.list-group-item');
@@ -69,7 +63,6 @@
                 var endTime = $('[name="time_out_' + selectedEmployeeId + '"]').val();
                 console.log(endTime);
 
-                //if both end and start time is set, append the element
                 if (startTime && endTime) {
 
                     const firstPositionName = $employeeItem.find('[data-position-name]:first').data(
@@ -78,23 +71,108 @@
                     // Remove spaces from firstPositionName
                     const cleanedFirstPositionName = firstPositionName.replace(/\s+/g, '');
                     const matchingElement = document.getElementById(cleanedFirstPositionName);
-
                     if (matchingElement) {
-
                         console.log(`Element with ID '${cleanedFirstPositionName}' exists.`);
-                        //clone the anchor element to be appended
+                        //$('#' + cleanedFirstPositionName).append($employeeItem);
+
                         const clonedEmployeeItem = $employeeItem.clone();
                         $('#' + cleanedFirstPositionName).append(clonedEmployeeItem);
                         // Append the reverse button to the cloned employee item
                         const reverseButton = $(
-                            '<div><button class="btn btn-danger btn-sm reverse-btn">Reverse</button></div>');
+                            '<button class="btn btn-danger btn-sm reverse-btn">Reverse</button>');
                         clonedEmployeeItem.append(reverseButton);
+
+                        console.log('');
+                        console.log('element dropped successfully ');
+                        console.log('');
+                        console.log(clonedEmployeeItem);
 
                     } else {
                         console.log(`Element with ID '${cleanedFirstPositionName}' does not exist.`);
                     }
 
+
+
+                    // Access employee's name using data-employee-name attribute
+                    const employeeName = $(this).closest('.list-group-item').find('[data-employee-name]')
+                        .data('employee-name');
+                    console.log("Employee Name:", employeeName);
+
+                    // Access the age using data-employee-age attribute
+                    const employeeAge = $(this).closest('.list-group-item').find('[data-employee-age]')
+                        .data('employee-age');
+                    console.log("Employee Age:", employeeAge);
+
+                    //accessing employee positions
+                    const $positionButtons = $(this).closest('.list-group-item').find(
+                        '[data-position-name]');
+                    $positionButtons.each(function() {
+                        const positionName = $(this).data('position-name');
+                        console.log("Position Name:", positionName);
+                    });
+                    console.log("both values achieved now call a function");
+
+
+                    //step2.........................creating new element................................. 
+
+
+                    const $newElement = $(
+                        '<a href="#" class="list-group-item d-flex align-items-center">' +
+                        '<div class="pe-3">' +
+                        '<div class="avatar avatar-info avatar-state-secondary">' +
+                        '<span class="avatar-text rounded-circle">' + selectedEmployeeId + '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div>' +
+                        '<p class="mb-1" data-employee-name="' + employeeName +
+                        '" data-employee-age="' +
+                        employeeAge + '" >' +
+                        employeeName + ' (' + employeeAge + ')</p>' +
+                        '<div class="text-muted d-flex align-items-center">' +
+                        '<input type="text" class="form-control clockpicker-example" name="time_in_' +
+                        selectedEmployeeId + '" readonly value="' +
+                        startTime + '">' +
+                        '<input type="text" class="form-control clockpicker-example" name="time_out_' +
+                        selectedEmployeeId + '" readonly value="' +
+                        endTime + '">' +
+                        '</div>' +
+                        '<div class="mt-2">' +
+                        $employeeItem.find('[data-position-name]').map(function() {
+                            const positionName = $(this).data('position-name');
+                            return '<button type="button" class="btn btn-primary btn-small">' +
+                                positionName + '</button>';
+                        }).get().join(' ') +
+                        '</div>' +
+                        '</div>' +
+                        '</a>'
+                    );
+
+
+                    //step3...................... get the first position of the current employee here..........................
+
+
+                    // const firstPositionName = $employeeItem.find('[data-position-name]:first').data(
+                    //     'position-name');
+                    // console.log("first position of this employee is: " + firstPositionName);
+
+                    // // Remove spaces from firstPositionName
+                    // const cleanedFirstPositionName = firstPositionName.replace(/\s+/g, '');
+
+
+                    //step4.............. Check if an element with the ID exists then append the current employee....
+
+
+                    //const matchingElement = document.getElementById(cleanedFirstPositionName);
+                    if (matchingElement) {
+                        console.log(`Element with ID '${cleanedFirstPositionName}' exists.`);
+                        //$('#' + cleanedFirstPositionName).append($newElement);
+                    } else {
+                        console.log(`Element with ID '${cleanedFirstPositionName}' does not exist.`);
+                    }
+
+
                     //step............. delete the employee list group item from the employees list................
+
 
                     $employeeItem.remove();
 
@@ -102,36 +180,32 @@
 
             });
 
-        }
+            // Delegated event handler for reverse button click
+            $(document).on('click', '.reverse-btn', function() {
+                // Find the closest parent list-group-item
+                const $employeeItem = $(this).closest('.list-group-item');
 
-        // Delegated event handler for reverse button click
-        $(document).on('click', '.reverse-btn', function() {
-            // Find the closest parent list-group-item
-            const $employeeItem = $(this).closest('.list-group-item');
-            const selectedEmployeeId = $($employeeItem).closest('.list-group-item').attr(
-                'id');
+                // Find the original div by ID
+                const originalElement = document.getElementById("all-employees");
+                if (originalElement) {
 
-            // Find the original div by ID
-            const originalElement = document.getElementById("all-employees");
-            if (originalElement) {
-                //remove the reverse button
-                $employeeItem.find('.reverse-btn').remove();
-                // Reset input field values
-                $employeeItem.find('input').val('');
-                // Move the employee item back to the original div
-                $employeeItem.appendTo(originalElement);
-                //Reinitialize the clockpicker by callback
-                const timeInId = "#time_in_" + selectedEmployeeId;
-                console.log("the time in id is ", timeInId);
-                const timeOutId = "#time_out_" + selectedEmployeeId;
-                console.log("the time out id is ", timeOutId);
+                    $employeeItem.find('.reverse-btn').remove();
+                    // Reset input field values
+                    $employeeItem.find('input').val('');
 
-                initializeClockpicker(timeOutId);
-                initializeClockpicker(timeInId);
-                console.log('Element moved back to the original div');
-            } else {
-                console.log(`Element with ID does not exist.`);
-            }
+
+                    // Move the employee item back to the original div
+                    $employeeItem.appendTo(originalElement);
+                    $('.clockpicker-example').clockpicker({
+                        donetext: 'Done'
+                    });
+                    console.log('Element moved back to the original div');
+
+                } else {
+                    console.log(`Element with ID does not exist.`);
+                }
+
+            });
 
         });
     </script>
@@ -148,49 +222,6 @@
                 group: 'shared',
                 animation: 150,
 
-                onAdd: function(evt) {
-                    const sourceElement = evt.from;
-                    console.log("from ", sourceElement);
-                    const draggedElement = evt.item; // Dragged item
-                    console.log("item ", draggedElement);
-                    const targetElement = evt.to; // Target list
-                    console.log("target ", targetElement);
-
-                    //access buttons of the dragged element
-                    const draggedButtons = $(draggedElement).find('.position-btn');
-                    const targetId = $(targetElement).attr('id');
-
-                    //accessing employee id
-                    selectedEmployeeId = $(draggedElement).closest('.list-group-item').attr(
-                        'id');
-
-                    //accessing employee start time
-                    const startTime = $('[name="time_in_' + selectedEmployeeId + '"]')
-                        .val();
-
-                    //accessing employee end time
-                    const endTime = $('[name="time_out_' + selectedEmployeeId + '"]').val();
-
-                    //check if vales are empty
-                    let haveValues = true;
-                    if (startTime == "" || endTime == "") {
-                        haveValues = false;
-                    }
-
-                    if (haveValues) {
-                        //remove the reverse button
-                        $(draggedElement).find('.reverse-btn').remove();
-                        // Reset input field values
-                        $(draggedElement).find('input').val('');
-                        //Reinitialize the clockpicker for current element's both inputs
-                        const timeInId = "#time_in_" + selectedEmployeeId;
-                        initializeClockpicker(timeInId);
-                        const timeOutId = "#time_out_" + selectedEmployeeId;
-                        initializeClockpicker(timeOutId);
-                    }
-
-                },
-
             });
 
 
@@ -198,15 +229,17 @@
             // Create Sortable objects for each card's div with class "sortable-card-body"
             $('.sortable-card-body').each(function() {
                 const cardSortable = new Sortable(this, {
-                    group: 'shared',
+                    group: 'shared', // Set your desired group here
                     animation: 150,
 
                     onStart: function(evt) {
                         const sourceElement = evt.from; // Source list
                         const draggedElement = evt.item; // Dragged item
+                        console.log('Drag started from:', sourceElement);
+                        console.log('Dragged element:', draggedElement);
 
                         // Find buttons within dragged element
-                        const buttons = $(draggedElement).find('.position-btn');
+                        const buttons = $(draggedElement).find('.btn');
 
                         //if employee has only one position button, prevent pull out
                         if (buttons.length <= 1) {
@@ -218,26 +251,8 @@
                         const draggedElement = evt.item; // Dragged item
                         const targetElement = evt.to; // Target list
 
-                        //access buttons of the dragged element
-                        const draggedButtons = $(draggedElement).find('.position-btn');
+                        const draggedButtons = $(draggedElement).find('.btn');
                         const targetId = $(targetElement).attr('id');
-
-                        //accessing employee id
-                        selectedEmployeeId = $(draggedElement).closest('.list-group-item').attr(
-                            'id');
-
-                        //accessing employee start time
-                        const startTime = $('[name="time_in_' + selectedEmployeeId + '"]')
-                            .val();
-
-                        //accessing employee end time
-                        const endTime = $('[name="time_out_' + selectedEmployeeId + '"]').val();
-
-                        //check if vales are empty
-                        let haveValues = true;
-                        if (startTime == "" || endTime == "") {
-                            haveValues = false;
-                        }
 
                         // Check if any of the dragged buttons' text (without spaces) matches the target's ID
                         let canDrop = false;
@@ -249,12 +264,14 @@
                             }
                         });
 
-                        if (canDrop == false || haveValues == false) {
+                        if (!canDrop) {
                             // If the condition is not met, prevent dropping
-                            // Return the dragged element to its original list
                             evt.from.appendChild(
                                 draggedElement
-                            );
+                            ); // Return the dragged element to its original list
+                        } else {
+                            console.log('Dropped element:', draggedElement);
+                            console.log('Dropped into:', targetElement);
                         }
                     },
 
@@ -282,28 +299,22 @@
 
                     // Loop through each employee item within the card body
                     $(cardBody).find('.list-group-item').each(function() {
-
-                        selectedEmployeeId = $(this).closest('.list-group-item').attr('id');
-                        //console.log(selectedEmployeeId);
-
-                        var startTime = $('[name="time_in_' + selectedEmployeeId + '"]').val();
-                        //console.log(startTime);
-
-                        var endTime = $('[name="time_out_' + selectedEmployeeId + '"]').val();
-                        //console.log(endTime);
-
+                        var employeeId = $(this).find('.avatar-text').text();
+                        var startTime = $(this).find('[name^="time_in_' + employeeId + '"]')
+                            .val();
+                        var endTime = $(this).find('[name^="time_out_' + employeeId + '"]').val();
                         var employeeName = $(this).closest('.list-group-item').find(
                             '[data-employee-name]').data('employee-name');
                         var employeeAge = $(this).closest('.list-group-item').find(
                             '[data-employee-age]').data('employee-age');
 
                         var positions = [];
-                        $(this).find('.position-btn').each(function() {
+                        $(this).find('.btn').each(function() {
                             positions.push($(this).text().trim());
                         });
 
                         var employeeItemData = {
-                            employeeId: selectedEmployeeId,
+                            employeeId: employeeId,
                             startTime: startTime,
                             endTime: endTime,
                             positions: positions,
@@ -316,14 +327,14 @@
                     });
                 });
 
-                // Log the employee data to the console before ajax
+                // Log the employee data to the console
                 console.log(employeeData);
 
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('employeeSchedule') }}',
-                    data: JSON.stringify(employeeData),
-                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData), // Send as JSON string
+                    contentType: 'application/json', // Set content type
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -427,37 +438,104 @@
 <div class="row">
     <div class="col-7">
 
-        @foreach ($positions as $position)
-            <div class="card mb-2">
-                <div class="card-header d-flex align-items-center disabled">
-                    <div>
-                        <p class="mb-1"> {{ $position->name }} </p>
-                    </div>
-                </div>
-                <div class="card-body sortable-card-body" id="{{ str_replace(' ', '', $position->name) }}">
-
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> Register </p>
                 </div>
             </div>
-        @endforeach
+            <div class="card-body sortable-card-body" id="Register">
 
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> Runner </p>
+                </div>
+            </div>
+            <div class="card-body sortable-card-body" id="Runner">
+
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> Fryer </p>
+                </div>
+            </div>
+            <div class="card-body sortable-card-body" id="Fryer">
+
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> Griller </p>
+                </div>
+            </div>
+            <div class="card-body sortable-card-body" id="Griller">
+
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> Mobile Order </p>
+                </div>
+            </div>
+            <div class="card-body sortable-card-body" id="MobileOrder">
+
+
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> BacklineCook </p>
+                </div>
+            </div>
+            <div class="card-body sortable-card-body" id="BacklineCook">
+
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-header d-flex align-items-center disabled">
+                <div>
+                    <p class="mb-1"> Sandwich Designer </p>
+                </div>
+            </div>
+            <div class="card-body sortable-card-body" id="SandwichDesigner">
+
+            </div>
+        </div>
     </div>
 
     <div class="col-5">
+
         <div class="chat-block">
+
             <div class="chat-sidebar" style="width: 100%;">
                 <div tabindex="1" class="chat-sidebar-content" {{-- style="overflow: hidden; outline: none;" --}}>
+
                     <div id="pills-tabContent" class="tab-content">
                         <div id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
                             class="tab-pane fade active show">
-
-                            <div class="card-header d-flex align-items-center disabled" id="drop-employees">
-                                <div>
-                                    <p class="mb-1"> All Employees </p>
-                                </div>
-                            </div>
-
                             <div class="list-group list-group-flush" id="all-employees"
                                 style="border: solid #eb2f516b; min-height:100px;">
+
+                                <a href="#" class="list-group-item d-flex align-items-center disabled"
+                                    id="drop-employees">
+                                    <div>
+                                        <p class="mb-1"> All Employees </p>
+                                    </div>
+                                </a>
 
 
                                 @foreach ($employees as $employee)
@@ -470,30 +548,34 @@
                                             </div>
                                         </div>
                                         <div>
+
+
                                             <p class="mb-1" data-employee-name="{{ $employee->name }}"
                                                 data-employee-age="{{ $employee->age }}">
                                                 {{ $employee->name }} ({{ $employee->age }})</p>
                                             <div class="text-muted d-flex align-items-center">
                                                 <input type="text" class="form-control clockpicker-example"
-                                                    id="time_in_{{ $employee->id }}"
                                                     name="time_in_{{ $employee->id }}" placeholder="Start Time">
                                                 <input type="text" class="form-control clockpicker-example"
-                                                    id="time_out_{{ $employee->id }}"
                                                     name="time_out_{{ $employee->id }}" placeholder="End Time">
                                                 <!-- hamza -->
                                             </div>
 
                                             <div class="mt-2">
+
                                                 @foreach ($employee->positions as $position)
-                                                    <button type="button"
-                                                        class="btn btn-primary btn-small position-btn"
+                                                    <button type="button" class="btn btn-primary btn-small"
                                                         data-position-name="{{ $position->name }}">{{ $position->name }}</button>
                                                 @endforeach()
                                             </div>
+
                                         </div>
+
                                     </a>
                                 @endforeach()
+
                             </div>
+
                         </div>
                     </div>
                 </div>

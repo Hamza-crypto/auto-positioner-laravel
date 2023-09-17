@@ -27,7 +27,7 @@
                         <i class="bi bi-person-circle"></i>
                     </span>
                     <span>Employees</span>
-                    <i class="sub-menu-arrow bi bi-arrow-right"></i>
+                    <i class="sub-menu-arrow bi bi-arrow-right"></i> 
                 </a>
                 <ul style="display: none;">
                     <li><a class="{{ request()->is('users') ? 'active' : '' }}" href="{{ route('users.index') }}">All

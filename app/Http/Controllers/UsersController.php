@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserPosition;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,20 +26,23 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        //for users table query
         $user = new User();
         $user->name = $request->input('name');
         $user->age = $request->input('age');
-        $user->time_in = $request->input('time_in');
-        $user->time_out = $request->input('time_out');
-        $user->break_in = $request->input('break_in');
-        $user->break_out = $request->input('break_out');
-        $user->position_ids = json_encode($request->input('positions'));
-
         $user->save();
 
-        // Attach positions to the user (assuming "positions" is a many-to-many relationship)
-        $user->positions()->attach($request->input('positions'));
+        //for userPositions table
+        $userId = $user->id;
 
+        $selectedPositions = $request->input('positions', []);
+
+        foreach ($selectedPositions as $positionId) {
+            $userPosition = new UserPosition();
+            $userPosition->user_id = $userId;
+            $userPosition->position_id = $positionId; 
+            $userPosition->save();
+        }
         // Redirect the user to a success page or any other page as per your requirement
         return redirect()->route('users.index')->with('success', 'User information stored successfully!');
     }
@@ -52,17 +56,12 @@ class UsersController extends Controller
         }, $user->positions->toArray());
 
         return view('pages.users.edit', get_defined_vars());
-
     }
 
     public function update(User $user, Request $request)
     {
         $user->name = $request->input('name');
         $user->age = $request->input('age');
-        $user->time_in = $request->input('time_in');
-        $user->time_out = $request->input('time_out');
-        $user->break_in = $request->input('break_in');
-        $user->break_out = $request->input('break_out');
 
         $positions = $request->input('positions', []); // Get the positions from the request (assuming it's an array)
         $user->positions()->sync($positions);
@@ -70,7 +69,7 @@ class UsersController extends Controller
         // Save the updated user record
         $user->save();
 
-// Redirect the user to a success page or any other page as per your requirement
+        // Redirect the user to a success page or any other page as per your requirement
         return redirect()->route('users.index')->with('success', 'User information updated successfully!');
 
         Session::flash('success', __('Account information successfully updated.'));
@@ -91,7 +90,6 @@ class UsersController extends Controller
         Session::flash('password_update', 'Password updated successfully.');
 
         return redirect()->route('users.index');
-
     }
 
     public function destroy(User $user)
@@ -109,29 +107,34 @@ class UsersController extends Controller
         if ($request->usdt != null) {
             $user->metas()->updateOrCreate(
                 ['meta_key' => 'usdt_address'],
-                ['meta_value' => $request->usdt]);
+                ['meta_value' => $request->usdt]
+            );
         }
 
         if ($request->btc != null) {
             $user->metas()->updateOrCreate(
                 ['meta_key' => 'btc_address'],
-                ['meta_value' => $request->btc]);
+                ['meta_value' => $request->btc]
+            );
         }
 
         if ($request->trc != null) {
             $user->metas()->updateOrCreate(
                 ['meta_key' => 'trc_address'],
-                ['meta_value' => $request->trc]);
+                ['meta_value' => $request->trc]
+            );
         }
 
         if (Auth()->user()->role == 'admin') {
             $user->metas()->updateOrCreate(
                 ['meta_key' => 'rate'],
-                ['meta_value' => $request->rate]);
+                ['meta_value' => $request->rate]
+            );
         } else {
             $user->metas()->updateOrCreate(
                 ['meta_key' => 'rate'],
-                ['meta_value' => $user->rate]);
+                ['meta_value' => $user->rate]
+            );
         }
 
         Session::flash('account', 'Wallet info updated successfully.');
@@ -146,7 +149,8 @@ class UsersController extends Controller
 
             $user->metas()->updateOrCreate(
                 ['meta_key' => 'gateway'],
-                ['meta_value' => $request->gateway_id]);
+                ['meta_value' => $request->gateway_id]
+            );
         }
 
         Session::flash('account', 'Gateway updated successfully.');
@@ -166,7 +170,8 @@ class UsersController extends Controller
             }
             $user->updateOrCreate(
                 ['id' => $user->id],
-                ['parent_id' => $parent_id]);
+                ['parent_id' => $parent_id]
+            );
         }
 
         Session::flash('account', 'Successfully assigned.');
@@ -178,12 +183,12 @@ class UsersController extends Controller
     {
         $user->metas()->updateOrCreate(
             ['meta_key' => 'order_category'],
-            ['meta_value' => $request->category]);
+            ['meta_value' => $request->category]
+        );
 
         Session::flash('account', 'Order Category updated successfully.');
 
         return redirect()->back();
-
     }
 
     public function update_payable_section(Request $request, User $user)
@@ -195,11 +200,11 @@ class UsersController extends Controller
         }
         $user->metas()->updateOrCreate(
             ['meta_key' => 'payable_visible'],
-            ['meta_value' => $status]);
+            ['meta_value' => $status]
+        );
 
         Session::flash('account', 'Successfully updated.');
 
         return redirect()->back();
-
     }
 }

@@ -49,8 +49,6 @@ function confirmDelete(event, formElement) {
                     {{--                    </th>--}}
                     <th>Name</th>
                     <th>Age</th>
-                    <th>Shift time</th>
-                    <th>Break Time</th>
                     <th>Positions</th>
                     <th>Action</th>
                 </tr>
@@ -67,8 +65,6 @@ function confirmDelete(event, formElement) {
                         </a>
                     </td>
                     <td>{{ $user->age }}</td>
-                    <td>{{ $user->time_in }} - {{ $user->time_out }}</td>
-                    <td>{{ $user->break_in }} - {{ $user->break_out }}</td>
                     <td>
                         @foreach($user->positions as $position)
                         <span class="badge bg-success">{{ $position['name'] }}</span>

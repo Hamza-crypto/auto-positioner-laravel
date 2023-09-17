@@ -17,7 +17,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^4.2",
-        "rap2hpoutre/fast-excel": "^3.0",
+        "rap2hpoutre/fast-excel": "^5.2",
         "rap2hpoutre/laravel-log-viewer": "^2.0",
         "spatie/laravel-discord-alerts": "^1.2"
     },

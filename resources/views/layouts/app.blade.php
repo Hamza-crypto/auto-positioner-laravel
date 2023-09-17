@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title') - {{ env('APP_NAME') }} </title>
 
     <!-- Favicon -->
@@ -26,6 +28,7 @@
 
     @yield('styles')
     @yield('scripts')
+    
 
 </head>
 
@@ -52,13 +55,9 @@
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
 
-    <link href="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css
-" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css" rel="stylesheet">
 
-    <script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js
-"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js"></script>
 
     <script src="{{ mix('/js/app.js') }}"></script>
 
