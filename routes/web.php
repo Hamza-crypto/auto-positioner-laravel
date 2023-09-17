@@ -5,6 +5,7 @@ use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
+use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 use Spatie\DiscordAlerts\Facades\DiscordAlert;
 
 /*
@@ -20,6 +21,7 @@ use Spatie\DiscordAlerts\Facades\DiscordAlert;
 
 Route::get('/test', function () {
     DiscordAlert::message("test message");
+    echo "Done";
 });
 
 Route::redirect('/', '/dashboard');
@@ -42,6 +44,7 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.
 Route::resource('users', UsersController::class);
 Route::resource('employees', EmployeesController::class);
 Route::resource('positions', PositionController::class);
+Route::get('logs', [LogViewerController::class, 'index']);
 
 
 Route::post('/employee/schedule', [DashboardController::class, 'displayEmployeeSchedule'])->name('employeeSchedule');
