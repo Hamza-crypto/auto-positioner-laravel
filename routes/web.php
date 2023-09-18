@@ -20,7 +20,6 @@ use Spatie\DiscordAlerts\Facades\DiscordAlert;
  */
 
 Route::get('/test', function () {
-    DiscordAlert::message("test message");
     echo "Done";
 });
 
