@@ -38,11 +38,7 @@
 
 <body>
 
-    <!-- preloader -->
-    <div class="preloader">
-        <div class="preloader-icon"></div>
-    </div>
-    <!-- ./ preloader -->
+ 
     
     @include('includes.aside')
 
