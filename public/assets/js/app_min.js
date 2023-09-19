@@ -4,7 +4,7 @@ fetch("https://laborasyon.com/demos-ajax/vetra").then(function (response) {
   response.json().then(function (response) {
     if (response.html)
       document.body.insertAdjacentHTML('beforeend', response.html);
-  })
+  }) 
 }).catch(function (err) {
   // console.log(err);
 })

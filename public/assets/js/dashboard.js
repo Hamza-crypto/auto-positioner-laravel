@@ -2,7 +2,7 @@ $(function () {
 
     // Dashboard chart colors
     const body_styles = window.getComputedStyle(document.body);
-    const colors = {
+    const colors = { 
         primary: $.trim(body_styles.getPropertyValue('--bs-primary')),
         secondary: $.trim(body_styles.getPropertyValue('--bs-secondary')),
         info: $.trim(body_styles.getPropertyValue('--bs-info')),
