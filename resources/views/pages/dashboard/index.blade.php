@@ -26,8 +26,13 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-clockpicker.min.css') }}" type="text/css">
 @endsection
 
+@section('bundlingScripts')
+<script src="{{ asset('assets/js/bootstrap-clockpicker.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+@endsection
+
 @section('scripts')
-    <script src="{{ asset('assets/js/bootstrap-clockpicker.min.js') }}"></script>
     {{-- <script>
         $(document).ready(function() {
             $('#schedule-table').DataTable();
@@ -136,7 +141,6 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
     <script>
         //to make sortable and drag and drop
