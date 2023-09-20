@@ -61,7 +61,7 @@
     </div>
 
     {{-- Bundle scripts --}}
-    <script src="{{ mix('js/bundle.js') }}"></script>
+    <script src="{{ asset('js/bundle.js') }}"></script>
 
     {{-- place onload bundling scripts here  --}}
 
@@ -71,14 +71,14 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
     {{-- Examples --}}
-    <script src="{{ mix('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js"></script>
 
     {{-- Main Javascript file --}}
-    <script src="{{ mix('js/app_min.js') }}"></script>
+    <script src="{{ asset('js/app_min.js') }}"></script>
 
 
 
