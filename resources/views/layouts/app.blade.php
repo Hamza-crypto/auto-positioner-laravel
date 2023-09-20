@@ -38,7 +38,11 @@
 
 <body>
 
- 
+    {{-- <!-- preloader -->
+    <div class="preloader">
+        <div class="preloader-icon"></div>
+    </div>
+    <!-- ./ preloader --> --}}
     
     @include('includes.aside')
 
@@ -57,24 +61,24 @@
     </div>
 
     {{-- Bundle scripts --}}
-    <script src="{{ mix('assets/js/bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/bundle.js') }}"></script>
 
     {{-- place onload bundling scripts here  --}}
 
     @yield("bundlingScripts")
- 
+
     {{-- Slick --}}
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
     {{-- Examples --}}
-    <script src="{{ mix('assets/js/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/dashboard.js') }}"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js"></script>
 
     {{-- Main Javascript file --}}
-    <script src="{{ mix('assets/js/app_min.js') }}"></script>
+    <script src="{{ asset('assets/js/app_min.js') }}"></script>
 
 
 
