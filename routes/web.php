@@ -47,3 +47,4 @@ Route::get('logs', [LogViewerController::class, 'index']);
 
 
 Route::post('/employee/schedule', [DashboardController::class, 'displayEmployeeSchedule'])->name('employeeSchedule');
+Route::post('/employee/schedule/download', [DashboardController::class, 'downloadEmployeeSchedule'])->name('downloadSchedule');

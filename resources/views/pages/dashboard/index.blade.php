@@ -27,8 +27,29 @@
 @endsection
 
 @section('bundlingScripts')
-<script src="{{ asset('assets/js/bootstrap-clockpicker.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="{{ asset('assets/js/bootstrap-clockpicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    {{-- const XLSX = require('xlsx');
+
+// Sample data as an array of objects
+const data = [
+  { Name: 'John', Age: 30, City: 'New York' },
+  { Name: 'Alice', Age: 25, City: 'Los Angeles' },
+  { Name: 'Bob', Age: 35, City: 'Chicago' },
+];
+
+// Convert the data array into a worksheet
+const worksheet = XLSX.utils.json_to_sheet(data);
+
+// Create a workbook and add the worksheet to it
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+// Save the workbook as an Excel file
+XLSX.writeFile(workbook, 'output.xlsx');
+ --}}
 
 @endsection
 
@@ -44,6 +65,8 @@
             var allEmployees = ".clockpicker-example";
             initializeClockpicker(allEmployees);
         });
+
+
 
         function initializeClockpicker(selector) {
 
@@ -350,6 +373,127 @@
                         // Call the showSchedule function to populate the schedule
                         showSchedule(response.schedule);
 
+                        // Create a new button element for download
+
+                        var downloadBtn = document.createElement("button");
+                        downloadBtn.id = "downloadButton";
+                        downloadBtn.className = "btn btn-success"; // You can set the desired class here
+                        downloadBtn.innerText = "Download Schedule";
+
+                        // Append the download button to the element with the "downloadButton" id
+
+                        var downloadButtonElement = document.getElementById("downloadButtonDiv");
+                        //before appending, clear the element
+                        if (downloadButtonElement.firstChild) {
+                            while (downloadButtonElement.firstChild) {
+                                downloadButtonElement.removeChild(downloadButtonElement.firstChild);
+                            }
+                        }
+
+
+                        downloadButtonElement.appendChild(downloadBtn);
+
+                        //attatch onclick event handler
+
+                        if ($('#downloadButton')) {
+                            $('#downloadButton').click(function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '{{ route('downloadSchedule') }}',
+                                    data: JSON.stringify(schedule),
+                                    contentType: 'application/json',
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                                            .attr('content')
+                                    },
+                                    success: function(response) {
+                                        console.log("Schedule:" + response.data);
+                                        console.log("Message:" + response.message);
+
+                                        //code to make and download the excel sheat
+
+                                        // Convert the data array into a worksheet
+                                        const worksheet = XLSX.utils.json_to_sheet(
+                                            response.data);
+                                        // Define cell styles
+                                        const style = {
+                                            font: {
+                                                color: {
+                                                    rgb: "FFFF00FF"
+                                                }
+                                            }, // Font color (yellow)
+                                            fill: {
+                                                fgColor: {
+                                                    rgb: "FF00FF00"
+                                                }
+                                            }, // Background color (green)
+                                            border: {
+                                                top: {
+                                                    style: "thin",
+                                                    color: {
+                                                        auto: 1
+                                                    }
+                                                },
+                                                bottom: {
+                                                    style: "thin",
+                                                    color: {
+                                                        auto: 1
+                                                    }
+                                                },
+                                                left: {
+                                                    style: "thin",
+                                                    color: {
+                                                        auto: 1
+                                                    }
+                                                },
+                                                right: {
+                                                    style: "thin",
+                                                    color: {
+                                                        auto: 1
+                                                    }
+                                                },
+                                            },
+                                        };
+
+                                        // Apply styles to specific cells in the first row
+                                        for (let i = 0; i < response.data[0].length; i++) {
+                                            const cellAddress = XLSX.utils
+                                                .encode_cell({
+                                                    r: 0,
+                                                    c: i
+                                                });
+                                            worksheet[cellAddress].s = style;
+                                        }
+
+                                        // Apply styles to specific cells in the first column
+                                        for (let i = 1; i < response.data.length; i++) {
+                                            const cellAddress = XLSX.utils
+                                                .encode_cell({
+                                                    r: i,
+                                                    c: 0
+                                                });
+                                            worksheet[cellAddress].s = style;
+                                        }
+
+
+                                        // Create a workbook and add the worksheet to it
+                                        const workbook = XLSX.utils.book_new();
+                                        XLSX.utils.book_append_sheet(workbook,
+                                            worksheet, 'Sheet1');
+
+                                        // Save the workbook as an Excel file
+                                        XLSX.writeFile(workbook, 'output.xlsx');
+
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('AJAX error:', error);
+                                        console.log('XHR:', xhr);
+                                    }
+                                });
+                            });
+                        }
+
+
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX error:', error);
@@ -359,6 +503,7 @@
             }
 
             $('#fetchScheduleButton').click(function() {
+                //ajax call
                 sendEmployeeData();
             });
 
@@ -512,6 +657,11 @@
         <button id="fetchScheduleButton" class="btn btn-primary">Fetch Schedule</button>
 
     </div>
+
+    <div class="col" id="downloadButtonDiv">
+
+    </div>
+
 </div>
 
 <div class="row">

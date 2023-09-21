@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Rap2hpoutre\FastExcel\FastExcel;
+use OpenSpout\Common\Entity\Style\Style;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Position;
 use App\Models\User;
 use Carbon\Carbon;
@@ -495,11 +498,6 @@ class DashboardController extends Controller
             $scheduleData[$rowIndex] = $row;
         }
 
-        // ............................Create the Excel file using the FastExcel library.........................
-
-        $filePath = storage_path('app/temp/schedule.xlsx');
-        (new FastExcel($scheduleData))->export($filePath);
-
         //.............................. Return the data as a response to the AJAX call..........................
 
         return response()->json([
@@ -507,7 +505,7 @@ class DashboardController extends Controller
             'processedData' => $processedData,
             'schedule' => $scheduleData,
             'breakArray'  => $breakArray,
-            'waitingQue'  =>$waitingQue,
+            'waitingQue'  => $waitingQue,
         ]);
     }
 
@@ -740,5 +738,73 @@ class DashboardController extends Controller
             }
         }
         return false;
+    }
+
+    // ...................................................................................................
+    //............................code section to download the sheat.................................................
+    //...................................................................................................
+
+    public function downloadEmployeeSchedule(Request $request)
+    {
+        $sheat = $request->json()->all();
+
+        $structuredSheat = $this->structure($sheat);
+
+        //...........................styling...................................
+
+        $header_style = (new Style())->setFontBold()->setFontSize(10)->setBackgroundColor("0000FF")->setFontColor("FFFFFF");
+
+        $rows_style = (new Style())->setFontSize(12);
+
+        $filePath = storage_path('app/temp/sheat.xlsx');
+        $excelFile = new FastExcel($structuredSheat);
+        $excelFile->export($filePath);
+        $excelFile->download('sheat.xlsx');
+
+        return response()->json([
+            'message' => 'Form data received and processed successfully',
+            'data' => $structuredSheat,
+
+        ]);
+    }
+
+
+    private function structure($sheat)
+    {
+        // Get the maximum number of columns based on the header row
+        $maxColumns = count($sheat[0]);
+
+        // Iterate through the existing data to structure the data
+
+        foreach ($sheat as $row) {
+            // Initialize a new row with empty values for all columns
+            $newRow = array_fill(0, $maxColumns, null);
+
+            // Fill the new row with values from the existing row
+            foreach ($row as $index => $value) {
+                $newRow[$index] = $value;
+            }
+
+            // Add the new row to the structured data
+            $structuredSheat[] = $newRow;
+        }
+
+        //preparing sheat for fast excel
+
+        $header = $structuredSheat[0];
+        $preparedSheat = [];
+        foreach ($structuredSheat as $rowIndex => $row) {
+            if ($rowIndex === 0) {
+                continue;
+            }
+            $newRow = [];
+            foreach ($row as $colIndex => $value) {
+                $key = $header[$colIndex];
+                $newRow[$key] = $value;
+            }
+            $preparedSheat[] = $newRow;
+        }
+
+        return $preparedSheat;
     }
 }
