@@ -1,9 +1,9 @@
 <div class="menu">
     <div class="menu-header">
-        <a href="index.html" class="menu-header-logo">
+        <a href="{{ route('dashboard.index') }}" class="menu-header-logo">
             <img src="{{ asset('assets/img/logo.svg') }}" alt="logo">
         </a>
-        <a href="index.html" class="btn btn-sm menu-close-btn">
+        <a href="{{ route('dashboard.index') }}" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
         </a>
     </div>

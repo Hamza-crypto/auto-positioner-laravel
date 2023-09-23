@@ -31,25 +31,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    {{-- const XLSX = require('xlsx');
 
-// Sample data as an array of objects
-const data = [
-  { Name: 'John', Age: 30, City: 'New York' },
-  { Name: 'Alice', Age: 25, City: 'Los Angeles' },
-  { Name: 'Bob', Age: 35, City: 'Chicago' },
-];
-
-// Convert the data array into a worksheet
-const worksheet = XLSX.utils.json_to_sheet(data);
-
-// Create a workbook and add the worksheet to it
-const workbook = XLSX.utils.book_new();
-XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-// Save the workbook as an Excel file
-XLSX.writeFile(workbook, 'output.xlsx');
- --}}
 
 @endsection
 
@@ -67,6 +49,10 @@ XLSX.writeFile(workbook, 'output.xlsx');
         });
 
 
+
+        //.........................................................................................
+        // .............................clockpicker on employees...................................
+        //.........................................................................................
 
         function initializeClockpicker(selector) {
 
@@ -132,6 +118,11 @@ XLSX.writeFile(workbook, 'output.xlsx');
 
         }
 
+        //...........................................................................................
+        //..............................reverse button handler code..................................
+        //...........................................................................................
+
+
         // Delegated event handler for reverse button click
         $(document).on('click', '.reverse-btn', function() {
             // Find the closest parent list-group-item
@@ -162,11 +153,25 @@ XLSX.writeFile(workbook, 'output.xlsx');
             }
 
         });
+
+
+        //.......................................................................................
+        //..............................clock picker on schedule time............................
+        //.......................................................................................
+
+        $(document).ready(function() {
+            $('.clockpicker-schedule').clockpicker({
+                donetext: 'Done'
+            });
+        });
     </script>
 
 
     <script>
-        //to make sortable and drag and drop
+        //...........................................................................................
+        //..........................to make sortable and drag and drop...............................
+        //...........................................................................................
+
         $(document).ready(function() {
             var all_employees = document.getElementById('all-employees');
             // var present_employees = document.getElementById('present-employees');
@@ -292,8 +297,17 @@ XLSX.writeFile(workbook, 'output.xlsx');
         });
     </script>
 
+
+
     <script>
+        //.........................................................................................................................
+        //...............................ajax call code to fetch and download schedule..............................................
+        //.........................................................................................................................
+
         $(document).ready(function() {
+
+            //................................accessing employee data.......................................
+
 
             function sendEmployeeData() {
                 // Select all the card body divs
@@ -346,160 +360,193 @@ XLSX.writeFile(workbook, 'output.xlsx');
                 // Log the employee data to the console before ajax
                 console.log(employeeData);
 
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route('employeeSchedule') }}',
-                    data: JSON.stringify(employeeData),
-                    contentType: 'application/json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
 
-                        console.log("AJAX request successful");
-                        console.log("Message:", response.message);
+                //......................accessing schedule start and end time ..........................
 
-                        // Access the processed employee data
-                        const processedData = response.processedData;
-                        const schedule = response.schedule;
-                        const breakArray = response.breakArray;
-                        const waitingQue = response.waitingQue;
 
-                        console.log("Processed Data:", processedData);
-                        console.log("Schedule:", schedule);
-                        console.log("breakArray:", breakArray);
-                        console.log("waitingQue:", waitingQue);
+                var scheduleStartTime = $('[name="time_in_schedule"]').val();
+                console.log(scheduleStartTime);
+                var scheduleEndTime = $('[name="time_out_schedule"]').val();
+                console.log(scheduleEndTime);
+                //if schedue end and start time set, mae ajax 
+                if (scheduleStartTime && scheduleEndTime) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('employeeSchedule') }}',
+                        data: JSON.stringify({
+                            employeeData: employeeData,
+                            scheduleStartTime: scheduleStartTime, 
+                            scheduleEndTime: scheduleEndTime
+                        }),
+                        contentType: 'application/json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
 
-                        // Call the showSchedule function to populate the schedule
-                        showSchedule(response.schedule);
+                            console.log(response);
+                            console.log("AJAX request successful");
+                            console.log("Message:", response.message);
 
-                        // Create a new button element for download
+                            // Access the processed employee data
+                            const processedData = response.processedData;
+                            const schedule = response.schedule;
+                            const breakArray = response.breakArray;
+                            const waitingQue = response.waitingQue;
 
-                        var downloadBtn = document.createElement("button");
-                        downloadBtn.id = "downloadButton";
-                        downloadBtn.className = "btn btn-success"; // You can set the desired class here
-                        downloadBtn.innerText = "Download Schedule";
 
-                        // Append the download button to the element with the "downloadButton" id
+                            console.log("Processed Data:", processedData);
+                            console.log("Schedule:", schedule);
+                            console.log("breakArray:", breakArray);
+                            console.log("waitingQue:", waitingQue);
 
-                        var downloadButtonElement = document.getElementById("downloadButtonDiv");
-                        //before appending, clear the element
-                        if (downloadButtonElement.firstChild) {
-                            while (downloadButtonElement.firstChild) {
-                                downloadButtonElement.removeChild(downloadButtonElement.firstChild);
+                            // Call the showSchedule function to populate the schedule
+                            showSchedule(response.schedule);
+
+                            // Create a new button element for download
+
+                            var downloadBtn = document.createElement("button");
+                            downloadBtn.id = "downloadButton";
+                            downloadBtn.className =
+                                "btn btn-success"; // You can set the desired class here
+                            downloadBtn.innerText = "Download Schedule";
+
+                            // Append the download button to the element with the "downloadButton" id
+
+                            var downloadButtonElement = document.getElementById("downloadButtonDiv");
+                            //before appending, clear the element
+                            if (downloadButtonElement.firstChild) {
+                                while (downloadButtonElement.firstChild) {
+                                    downloadButtonElement.removeChild(downloadButtonElement.firstChild);
+                                }
                             }
-                        }
 
 
-                        downloadButtonElement.appendChild(downloadBtn);
+                            downloadButtonElement.appendChild(downloadBtn);
 
-                        //attatch onclick event handler
+                            //....................................................................................
+                            //..........attatch onclick event handler for dowwnload schedule button...............
+                            //....................................................................................
 
-                        if ($('#downloadButton')) {
-                            $('#downloadButton').click(function() {
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '{{ route('downloadSchedule') }}',
-                                    data: JSON.stringify(schedule),
-                                    contentType: 'application/json',
-                                    headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
-                                            .attr('content')
-                                    },
-                                    success: function(response) {
-                                        console.log("Schedule:" + response.data);
-                                        console.log("Message:" + response.message);
+                            if ($('#downloadButton')) {
+                                $('#downloadButton').click(function() {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '{{ route('downloadSchedule') }}',
+                                        data: JSON.stringify(schedule),
+                                        contentType: 'application/json',
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                                                .attr('content')
+                                        },
+                                        success: function(response) {
+                                            console.log("Schedule:" + response
+                                                .data);
+                                            console.log("Message:" + response
+                                                .message);
 
-                                        //code to make and download the excel sheat
+                                            //code to make and download the excel sheat
 
-                                        // Convert the data array into a worksheet
-                                        const worksheet = XLSX.utils.json_to_sheet(
-                                            response.data);
-                                        // Define cell styles
-                                        const style = {
-                                            font: {
-                                                color: {
-                                                    rgb: "FFFF00FF"
-                                                }
-                                            }, // Font color (yellow)
-                                            fill: {
-                                                fgColor: {
-                                                    rgb: "FF00FF00"
-                                                }
-                                            }, // Background color (green)
-                                            border: {
-                                                top: {
-                                                    style: "thin",
+                                            // Convert the data array into a worksheet
+                                            const worksheet = XLSX.utils
+                                                .json_to_sheet(
+                                                    response.data);
+                                            // Define cell styles
+                                            const style = {
+                                                font: {
                                                     color: {
-                                                        auto: 1
+                                                        rgb: "FFFF00FF"
                                                     }
-                                                },
-                                                bottom: {
-                                                    style: "thin",
-                                                    color: {
-                                                        auto: 1
+                                                }, // Font color (yellow)
+                                                fill: {
+                                                    fgColor: {
+                                                        rgb: "FF00FF00"
                                                     }
+                                                }, // Background color (green)
+                                                border: {
+                                                    top: {
+                                                        style: "thin",
+                                                        color: {
+                                                            auto: 1
+                                                        }
+                                                    },
+                                                    bottom: {
+                                                        style: "thin",
+                                                        color: {
+                                                            auto: 1
+                                                        }
+                                                    },
+                                                    left: {
+                                                        style: "thin",
+                                                        color: {
+                                                            auto: 1
+                                                        }
+                                                    },
+                                                    right: {
+                                                        style: "thin",
+                                                        color: {
+                                                            auto: 1
+                                                        }
+                                                    },
                                                 },
-                                                left: {
-                                                    style: "thin",
-                                                    color: {
-                                                        auto: 1
-                                                    }
-                                                },
-                                                right: {
-                                                    style: "thin",
-                                                    color: {
-                                                        auto: 1
-                                                    }
-                                                },
-                                            },
-                                        };
+                                            };
 
-                                        // Apply styles to specific cells in the first row
-                                        for (let i = 0; i < response.data[0].length; i++) {
-                                            const cellAddress = XLSX.utils
-                                                .encode_cell({
-                                                    r: 0,
-                                                    c: i
-                                                });
-                                            worksheet[cellAddress].s = style;
+                                            // Apply styles to specific cells in the first row
+                                            for (let i = 0; i < response.data[0]
+                                                .length; i++) {
+                                                const cellAddress = XLSX.utils
+                                                    .encode_cell({
+                                                        r: 0,
+                                                        c: i
+                                                    });
+                                                worksheet[cellAddress].s = style;
+                                            }
+
+                                            // Apply styles to specific cells in the first column
+                                            for (let i = 1; i < response.data
+                                                .length; i++) {
+                                                const cellAddress = XLSX.utils
+                                                    .encode_cell({
+                                                        r: i,
+                                                        c: 0
+                                                    });
+                                                worksheet[cellAddress].s = style;
+                                            }
+
+
+                                            // Create a workbook and add the worksheet to it
+                                            const workbook = XLSX.utils.book_new();
+                                            XLSX.utils.book_append_sheet(workbook,
+                                                worksheet, 'Sheet1');
+
+                                            // Save the workbook as an Excel file
+                                            XLSX.writeFile(workbook, 'output.xlsx');
+
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error('AJAX error:', error);
+                                            console.log('XHR:', xhr);
                                         }
-
-                                        // Apply styles to specific cells in the first column
-                                        for (let i = 1; i < response.data.length; i++) {
-                                            const cellAddress = XLSX.utils
-                                                .encode_cell({
-                                                    r: i,
-                                                    c: 0
-                                                });
-                                            worksheet[cellAddress].s = style;
-                                        }
-
-
-                                        // Create a workbook and add the worksheet to it
-                                        const workbook = XLSX.utils.book_new();
-                                        XLSX.utils.book_append_sheet(workbook,
-                                            worksheet, 'Sheet1');
-
-                                        // Save the workbook as an Excel file
-                                        XLSX.writeFile(workbook, 'output.xlsx');
-
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error('AJAX error:', error);
-                                        console.log('XHR:', xhr);
-                                    }
+                                    });
                                 });
-                            });
+                            }
+
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX error:', error);
+                            console.log('XHR:', xhr);
                         }
-
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX error:', error);
-                        console.log('XHR:', xhr);
-                    }
-                });
+                    });
+                } else {
+                    //create a sweat alert to set schedule time limits
+                    // Show SweetAlert alert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Please select schedule start and end time limits!',
+                    });
+                }
             }
 
             $('#fetchScheduleButton').click(function() {
@@ -629,7 +676,7 @@ XLSX.writeFile(workbook, 'output.xlsx');
                                                 <input type="text" class="form-control clockpicker-example"
                                                     id="time_out_{{ $employee->id }}"
                                                     name="time_out_{{ $employee->id }}" placeholder="End Time">
-                                                <!-- hamza -->
+
                                             </div>
 
                                             <div class="mt-2">
@@ -653,12 +700,29 @@ XLSX.writeFile(workbook, 'output.xlsx');
 </div>
 
 <div class="row my-3">
-    <div class="col">
+
+    {{-- schedule time range inputs --}}
+    <div class="col mx-3">
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control clockpicker-schedule" id="time_in_schedule"
+                    name="time_in_schedule" placeholder="Schedule Start Time">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control clockpicker-schedule" id="time_out_schedule"
+                    name="time_out_schedule" placeholder="Schedule End Time">
+            </div>
+        </div>
+    </div>
+
+    {{-- fetch schedule button --}}
+    <div class="col mx-3">
         <button id="fetchScheduleButton" class="btn btn-primary">Fetch Schedule</button>
 
     </div>
 
-    <div class="col" id="downloadButtonDiv">
+    {{-- download schedule excel button --}}
+    <div class="col mx-3" id="downloadButtonDiv">
 
     </div>
 

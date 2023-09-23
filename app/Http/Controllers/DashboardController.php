@@ -30,7 +30,10 @@ class DashboardController extends Controller
 
     public function displayEmployeeSchedule(Request $request)
     {
-        $employeeData = $request->json()->all();
+        //$employeeData = $request->json()->all();
+        $employeeData = $request->json('employeeData');
+        $scheduleStartTime = $request->json('scheduleStartTime');
+        $scheduleEndTime = $request->json('scheduleEndTime');
 
         //............................/\/\/\/\/\/\/\/\/\/\/\/\/\/\.............................
         //........................adding break window for each employee........................
@@ -82,9 +85,13 @@ class DashboardController extends Controller
 
         $scheduleData->push($headerRow);
 
-        // Generate the timeline of time slots in H:i format
-        $startTime = Carbon::createFromTime(8, 0); // Starting time 8:00
-        $endTime = Carbon::createFromTime(22, 0);   // Ending time 20:00
+        // Split the time strings into hours and minutes
+        list($startHour, $startMinute) = explode(':', $scheduleStartTime);
+        list($endHour, $endMinute) = explode(':', $scheduleEndTime);
+
+        // Create Carbon instances
+        $startTime = Carbon::createFromTime($startHour, $startMinute);
+        $endTime = Carbon::createFromTime($endHour, $endMinute);
         $timeSlot = 15; // Time slot in minutes
 
         while ($startTime <= $endTime) {

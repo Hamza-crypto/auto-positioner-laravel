@@ -65,7 +65,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label">Name</label>
+                                                        <label class="form-label"><strong>Name</strong></label>
                                                         <input type="text" class="form-control" name="name" required>
 
                                                     </div>
@@ -73,7 +73,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label">Age</label>
+                                                        <label class="form-label"><strong>Age</strong></label>
                                                         <input type="number" name="age" class="form-control" required>
                                                     </div>
                                                 </div>
@@ -82,6 +82,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
+                                                        <label class="form-label"><strong>Positions</strong></label>
                                                         @foreach ($positions as $position)
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
